@@ -5,22 +5,24 @@
 
 ### ListingsController
 - index: Search
-- new: Add Listing
-- create: Add Listing
 - show: Expanded Listing
+
+### MyListingsController
+- index: My Library
+- new
+- create
 - edit: Manage your Listings
 - update: Manage your Listings
 - destroy: Manage your Listings
-- my_listings: My Library
 
 ### MessagesController
 - index: Messages
-- create: Send a message
+- create: Send a message (creating transaction is included here)
 > Polymorphic `messageable` between TextMessage or Transaction 
 
 ### TransactionsController
 - index: My Transactions
-- create: Sending a Transaction
+- create: Sending a Transaction (not needed because you can only create a transaction using a message)
 - update: When clicked etc.
 - show: View Transaction details expanded 
 
