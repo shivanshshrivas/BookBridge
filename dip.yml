@@ -1,0 +1,82 @@
+version: '7.8'
+
+compose:
+  files:
+    - .dockerdev/compose.yml
+    - docker-compose.$USER.yml
+  project_name: bookbridge
+
+environment:
+  UID: ${DIP_CURRENT_USER}
+
+interaction:
+  sh:
+    description: Open a Bash shell within a Rails container (with dependencies up)
+    service: rails
+    command: /bin/bash
+
+  bash:
+    description: Run an arbitrary script within a container (or open a shell without deps)
+    service: rails
+    command: /bin/bash
+    compose_run_options: [no-deps]
+
+  bundle:
+    description: Run Bundler commands
+    service: rails
+    command: bundle
+    compose_run_options: [no-deps]
+
+  rake:
+    description: Run Rake commands
+    service: rails
+    command: bin/rake
+
+  rails:
+    description: Run Rails commands
+    service: rails
+    command: bin/rails
+    subcommands:
+      s:
+        description: Run Rails server available at http://localhost:3030
+        service: rails
+        compose:
+          run_options: [service-ports, use-aliases]
+
+  yarn:
+    description: Run Yarn commands
+    service: rails
+    command: yarn
+    compose_run_options: [no-deps]
+
+  rspec:
+    description: Run Rails tests
+    service: rails
+    environment:
+      RAILS_ENV: test
+    command: bundle exec rspec
+
+  standardrb:
+    description: Run StandardRB
+    service: standardrb
+    command: bundle exec standardrb
+    compose_run_options: [no-deps]
+
+  psql:
+    description: Run psql console
+    service: postgres
+    command: psql -h postgres -U postgres -d example_app_dev
+
+  'redis-cli':
+    description: Run Redis console
+    service: redis
+    command: redis-cli -h redis
+
+  setup: 
+    description: Alias for provision to normalize this for the bnb team
+    command: dip provision
+
+provision:
+  - dip compose down --volumes
+  - dip compose up -d postgres redis
+  - dip bash -c bin/setup

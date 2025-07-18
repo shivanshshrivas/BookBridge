@@ -1,0 +1,5 @@
+---
+rancher_url: https://rancher2.brandnewops.com
+namespace: BookBridge-production
+deployment_name: web-deployment
+rancher_project_id: 

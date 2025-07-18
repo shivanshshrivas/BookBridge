@@ -1,0 +1,27 @@
+on: [pull_request]
+
+jobs:
+  danger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Remove Gemfile and Gemfile.lock
+        run: |
+          rm -f Gemfile Gemfile.lock
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3
+
+      - name: Install Danger and dependencies
+        run: |
+          gem install danger
+          gem install faraday-retry
+          gem install faraday-multipart
+      - name: Run Danger
+        env:
+          DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: danger

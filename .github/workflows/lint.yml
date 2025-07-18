@@ -1,0 +1,18 @@
+on: [push]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - id: detect-ruby-version
+        name: Detect Ruby version
+        # This little bash snippet was generated using AI, if you're going to change it I would recommend doing the same.
+        # It extracts the Ruby version from the dockerfile.
+        run: echo "ruby_version=$(awk '/^ARG RUBY_VERSION=/ {sub(/=/, " "); print $3}' .dockerdev/Dockerfile)" >> $GITHUB_OUTPUT
+      - name: StandardRB Linter
+        uses: standardrb/standard-ruby-action@v1.4.0
+        with:
+          ruby-version: ${{ steps.detect-ruby-version.outputs.ruby_version }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,96 @@
+name: Sentry Auto Fix
+
+on:
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  sentry-auto-fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check associated issue for Sentry Issue
+        uses: actions/github-script@v6
+        with:
+          script: |
+            /**
+             * 1) Grab the PR body (the text in the PR description).
+             */
+            const prBody = context.payload.pull_request.body || '';
+
+            /**
+             * 2) Find references to GitHub issues in the PR body
+             *    using keywords like "Close #1234", "Closes #1234",
+             *    "Fix #1234", "Fixes #1234", "Resolve #1234", etc.
+             *
+             *    This regex captures any # followed by digits, as long
+             *    as one of the keywords appears before it.
+             */
+            const issueRefRegex = /\b(?:close|closes|fix|fixes|resolve|resolves)\s+#(\d+)/gi;
+            const matches = [...prBody.matchAll(issueRefRegex)];
+
+            if (!matches.length) {
+              console.log('No associated issues found in PR body, skipping.');
+              return;
+            }
+
+            // Keep track if we updated the PR body (so we only update once).
+            let updatedPrBody = prBody;
+            let hasUpdates = false;
+
+            /**
+             * 3) For each referenced issue, fetch that issue and look for a Sentry Issue line.
+             */
+            for (const match of matches) {
+              const issueNumber = match[1];
+              console.log(`Found reference to issue #${issueNumber}`);
+
+              // 3a) Fetch the issue from GitHub
+              const { data: issueData } = await github.rest.issues.get({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber
+              });
+
+              /**
+               * 4) Look for a line like:
+               *     Sentry Issue: [MERCHTABLE-AH](https://brand-new-box.sentry.io/...)
+               *
+               *    This regex captures:
+               *      - Group 1: "MERCHTABLE-AH"
+               *      - Group 2: "https://brand-new-box.sentry.io/..."
+               */
+              const issueBody = issueData.body || '';
+              const sentryIssueRegex = /Sentry Issue:\s*\[\s*([^\]]+)\s*\]\((https?:\/\/[^\)]+)\)/i;
+              const sentryMatch = issueBody.match(sentryIssueRegex);
+
+              if (sentryMatch) {
+                const sentryKey = sentryMatch[1].trim(); 
+                const sentryUrl = sentryMatch[2].trim();
+
+                console.log(`Found Sentry issue "${sentryKey}" in #${issueNumber} with link: ${sentryUrl}`);
+
+                // 5) If the PR body doesn't already contain "Fixes MERCHTABLE-AH (URL)", append it.
+                const fixString = `Fixes ${sentryKey} ([link](${sentryUrl}))`;
+                if (!updatedPrBody.includes(fixString)) {
+                  updatedPrBody += `\n\n${fixString}`;
+                  hasUpdates = true;
+                }
+              } else {
+                console.log(`No "Sentry Issue" line found in #${issueNumber}.`);
+              }
+            }
+
+            /**
+             * 6) If we've updated the PR body, commit the change back to the PR.
+             */
+            if (hasUpdates) {
+              await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: context.payload.pull_request.number,
+                body: updatedPrBody
+              });
+              console.log('PR body updated with Sentry fix references.');
+            } else {
+              console.log('No updates needed to PR body.');
+            }

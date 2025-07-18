@@ -1,0 +1,122 @@
+version: 2.1
+orbs:
+  drydock: brandnewbox/drydock@2.2.2
+parameters:
+  registry:
+    type: string
+    default: registry.digitalocean.com
+  builder-image:
+    type: string
+    default: brandnewbox/BookBridge-builder
+  final-image:
+    type: string
+    default: brandnewbox/BookBridge
+  rancher-context:
+    type: string
+    default: 'PLEASE ENTER THE RANCHER PROJECT ID HERE'
+  rancher-namespace:
+    type: string
+    default: BookBridge-production
+  working-directory:
+    type: string
+    default: /home/bnb/app
+workflows:
+  devops_flow:
+    jobs:
+      - drydock/build-and-push:
+          name: build-and-push-builder
+          built-image: << pipeline.parameters.registry >>/<< pipeline.parameters.builder-image >>:${CIRCLE_SHA1}
+          build-target: production-builder
+          working-directory: << pipeline.parameters.working-directory >>
+          cache-assets: true
+          cache-packs: false
+          docker-version: default
+          build-args: >-
+            --build-arg RAILS_MASTER_KEY=${RAILS_PRODUCTION_KEY}
+            --build-arg RAILS_ENV=production
+          context: DO_BNB_REGISTRY
+      - test:
+          image: << pipeline.parameters.registry >>/<< pipeline.parameters.builder-image >>:${CIRCLE_SHA1}
+          context: DO_BNB_REGISTRY
+          requires:
+            - build-and-push-builder
+      - drydock/build-and-push:
+          name: build-and-push-production
+          built-image: << pipeline.parameters.registry >>/<< pipeline.parameters.final-image >>:${CIRCLE_SHA1}
+          build-target: production
+          working-directory: << pipeline.parameters.working-directory >>
+          cache-assets: true
+          cache-packs: false
+          docker-version: default
+          build-args: >-
+            --build-arg RAILS_MASTER_KEY=${RAILS_PRODUCTION_KEY}
+            --build-arg RAILS_ENV=production
+          context: DO_BNB_REGISTRY
+          filters:
+            branches:
+              only: /^(main)$/
+          requires:
+            - build-and-push-builder
+      - drydock/create-deployment:
+          name: puma-deployment
+          rancher-deployment: web-deployment
+          rancher-container: web-container
+          rancher-namespace: << pipeline.parameters.rancher-namespace >>
+          rancher-context: << pipeline.parameters.rancher-context >>
+          image: << pipeline.parameters.registry >>/<< pipeline.parameters.final-image >>:${CIRCLE_SHA1}
+          credentials-key-env-var: RAILS_PRODUCTION_KEY
+          context: DO_BNB_REGISTRY
+          filters:
+            branches:
+              only: /^(main)$/
+          requires:
+            - build-and-push-production
+            - test
+      - drydock/create-deployment:
+          name: sidekiq-deployment
+          rancher-deployment: jobs-deployment
+          rancher-container: jobs-container
+          rancher-namespace: << pipeline.parameters.rancher-namespace >>
+          rancher-context: << pipeline.parameters.rancher-context >>
+          image: << pipeline.parameters.registry >>/<< pipeline.parameters.final-image >>:${CIRCLE_SHA1}
+          credentials-key-env-var: RAILS_PRODUCTION_KEY
+          should-update-credentials: false
+          context: DO_BNB_REGISTRY
+          filters:
+            branches:
+              only: /^(main)$/
+          requires:
+            - build-and-push-production
+            - test
+      - drydock/notify-sentry-deploy:
+          sentry-project: BookBridge
+          sentry-environment: production
+          context: SENTRY_RELEASE_CREDENTIALS
+          filters:
+            branches:
+              only: /^(main)$/
+          requires:
+            - puma-deployment
+            - sidekiq-deployment
+jobs:
+  test:
+    parameters:
+      image:
+        description: The image to test
+        type: string
+    docker:
+      - image: << parameters.image >>
+        auth:
+          username: $PRIVATE_REGISTRY_USERNAME
+          password: $PRIVATE_REGISTRY_PASSWORD
+        environment:
+          RAILS_ENV: test
+          DATABASE_URL: postgres://circleci:password@localhost:5432/my_database
+      - image: cimg/postgres:16.4
+        environment:
+          POSTGRES_USER: circleci
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: my_database
+    working_directory: << pipeline.parameters.working-directory >>
+    steps:
+      - drydock/default-test-steps

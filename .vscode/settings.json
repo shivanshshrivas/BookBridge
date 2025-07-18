@@ -1,0 +1,14 @@
+{
+  "standardRuby.mode": "enableUnconditionally",
+  "standardRuby.commandPath": "dip standardrb",
+  "[ruby]": {
+      "editor.defaultFormatter": "testdouble.vscode-standard-ruby",
+      "editor.formatOnSave": true
+  },
+  "rubyLsp.enabledFeatures": {
+    "codeActions": false,
+    "diagnostics": false,
+    "formatting": false,
+    "onTypeFormatting": false,
+  },
+}
