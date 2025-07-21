@@ -8,3 +8,10 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+body {
+    background: linear-gradient(to bottom right, #FFFFFF, #ECFBFF); /* Light blue to steel blue gradient */
+    height: 100vh; /* Full viewport height */
+    color: black;
+    font-family: 'Figtree', sans-serif;
+}

@@ -36,4 +36,3 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:account_update, keys: [:name, :profile_bio, :profile_picture])
   end
 end
-

@@ -9,6 +9,7 @@ FROM ruby:$RUBY_VERSION-slim-$DISTRO_NAME AS base
 
 # A recommended memory optimization for Ruby apps https://devcenter.heroku.com/articles/tuning-glibc-memory-behavior
 ENV MALLOC_ARENA_MAX=2
+ENV TAILWINDCSS_INSTALL_DIR=node_modules/.bin
 
 # Install application dependencies and then clean up after ourselves
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade \
