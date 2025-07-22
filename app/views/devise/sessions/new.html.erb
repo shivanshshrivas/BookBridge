@@ -1,30 +1,50 @@
-<div>
-  <h2>Welcome Back</h2>
-  <p>Log in to your account to continue</p>
-</div>
-<div>
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-    <div class="field">
-      <%= f.label :email, "Email address" %><br />
-      <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Enter your email" %>
+<div class="flex flex-row items-center mr-20 p-20 h-screen overflow-hidden">
+  <div class="absolute top-5 left-5 font-bold text-2xl">Book<span class="text-blue-500">Bridge</span></div>
+  <div>
+    <div class="absolute bottom-0 left-50 transform -rotate-45 bg-[#B8EEFF] w-150 h-36 rounded-full mix-blend-multiply"></div>
+    <div class="absolute bottom-0 left-50 transform -rotate-45 bg-blue-600 w-150 h-36 rounded-full mix-blend-screen"></div>
+
+    <div class=" absolute bottom-40 -left-10 transform -rotate-45 bg-[#B8EEFF] w-220 h-36 rounded-full mix-blend-multiply"></div>
+    <div class="absolute bottom-40 -left-10 transform -rotate-45 bg-blue-600 w-220 h-36 rounded-full mix-blend-screen"></div>
+
+    <div class="absolute bottom-20 -left-75 transform -rotate-45 bg-[#B8EEFF] w-180 h-36 rounded-full mix-blend-multiply"></div>
+    <div class="absolute bottom-20 -left-75 transform -rotate-45 bg-blue-600 w-180 h-36 rounded-full mix-blend-screen"></div>
+    
+    <div class="absolute bottom-60 -left-120 transform -rotate-45 bg-[#B8EEFF] w-220 h-36 rounded-full mix-blend-multiply"></div>
+    <div class="absolute bottom-60 -left-120 transform -rotate-45 bg-blue-600 w-220 h-36 rounded-full mix-blend-screen"></div>
+  </div>
+  <div class="mr-10">
+    <h1 class="text-8xl font-bold text-gray-900 leading-tight">
+      A book is more than just words on paper.
+    </h1>
+  </div>
+  <div class="flex flex-col w-full items-center ml-10">
+    <div class="text-center mb-6">
+      <h2 class="text-2xl font-semibold text-black">Welcome Back</h2>
+      <p class="text-sm text-gray-600">Log in to your account to continue</p>
     </div>
-    <div class="field">
-      <%= f.label :password %>
-      <%= link_to "Forgot password?", new_password_path(resource_name) %>
-      <br />
-      <%= f.password_field :password, autocomplete: "current-password", placeholder: "Enter your password" %>
-    </div>
-    <% if devise_mapping.rememberable? %>
-      <div class="field">
-        <%= f.check_box :remember_me %>
-        <%= f.label :remember_me %>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="mb-4">
+        <%= f.label :email, "Email address", class: "block text-sm font-medium text-gray-700" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Enter your email", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+      </div>
+      <div class="mb-4">
+        <%= f.label :password, class: "text-sm font-medium text-gray-700" %>
+        <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-sm text-gray-700 float-right" %>
+        <%= f.password_field :password, autocomplete: "current-password", placeholder: "Enter your password", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+      </div>
+      <% if devise_mapping.rememberable? %>
+        <div class="mb-4">
+          <%= f.check_box :remember_me, class: "mr-2 checkbox checkbox-sm border-gray-400 checked:border-blue-500 checked:bg-blue-500 checked:text-white rounded-md" %>
+          <%= f.label :remember_me, class: "text-sm text-gray-700" %>
+        </div>
+      <% end %>
+      <div class="actions">
+        <%= f.submit "Log in", class: "w-full p-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out" %>
       </div>
     <% end %>
-    <div class="actions btn btn-primary">
-      <%= f.submit "Log in" %>
+    <div class="text-center mt-4">
+      <p class="text-sm text-gray-600">Don't have an account? <%= link_to "Sign up", new_registration_path(resource_name), class: "font-bold" %></p>
     </div>
-  <% end %>
-  <div class="sign-up-link">
-    Dont have an account? <%= link_to "Sign up", new_registration_path(resource_name) %>
   </div>
 </div>
