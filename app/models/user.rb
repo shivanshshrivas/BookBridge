@@ -7,7 +7,6 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
 
-  after_initialize :set_default_admin, if: :new_record?
   before_validation :assign_university_from_email, on: :create
 
   def assign_university_from_email
