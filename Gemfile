@@ -1,6 +1,5 @@
 source "https://rubygems.org"
 
-# Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.0.0"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
 gem "propshaft"
@@ -57,3 +56,7 @@ gem "sentry-rails"
 gem "rack-mini-profiler"
 gem "memory_profiler"
 gem "stackprof"
+
+gem "devise", "~> 4.9", ">= 4.9.3"
+
+gem "tailwindcss-rails", "~> 4.3"
