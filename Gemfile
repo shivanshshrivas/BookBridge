@@ -61,5 +61,5 @@ gem "devise", "~> 4.9", ">= 4.9.3"
 
 gem "tailwindcss-rails", "~> 4.3"
 
-gem 'trestle'
-gem 'trestle-auth'
+gem "trestle"
+gem "trestle-auth"

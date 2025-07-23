@@ -226,5 +226,4 @@ Trestle.configure do |config|
       controller.redirect_to main_app.root_path
     end
   end
-
 end
