@@ -8,6 +8,7 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :validatable
 
   before_validation :assign_university_from_email, on: :create
+  after_initialize :set_default_admin, if: :new_record?
 
   def assign_university_from_email
     return if email.blank?
@@ -20,5 +21,11 @@ class User < ApplicationRecord
     end
 
     self.university = match["name"] if match
+  end
+
+  private
+
+  def set_default_admin
+    self.is_admin ||= false
   end
 end
