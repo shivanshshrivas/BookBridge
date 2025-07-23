@@ -22,10 +22,4 @@ class User < ApplicationRecord
 
     self.university = match["name"] if match
   end
-
-  private
-
-  def set_default_admin
-    self.is_admin ||= false
-  end
 end
