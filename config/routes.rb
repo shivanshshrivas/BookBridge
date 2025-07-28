@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "listings/index"
+  get "listings/show"
+  resources :my_listings
   get "home/index"
   devise_for :users
 
