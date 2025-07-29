@@ -12,58 +12,29 @@
           </svg>
           Add photos
         </label>
-        <%= form.file_field :images, multiple: true, accept: "image/*", id: "image-input", class: "hidden", onchange: "updateImageLabel()", "data-clear-files-target": "fileInput", "data-action": "change->clear-files#updateImageLabel" %>
+        <%= form.file_field :images, multiple: true, accept: "image/*", id: "image-input", class: "hidden", "data-clear-files-target": "fileInput", "data-action": "change->clear-files#updateImageLabel" %>
       </div>
       <button class="mt-4 w-full p-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300 ease-in-out" onclick="document.getElementById('image-input').value = ''">
         Clear
       </button>
     </div>
-
     <div class="flex flex-col ml-15 w-[60%]">
-      <div>
-        <%= form.label :title, "Book Title", class: "block font-medium text-gray-700" %>
-        <%= form.text_field :title, autofocus: true, placeholder: "Title goes here", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+      <div class="flex">
+        <%= form.input :title %>
       </div>
-      <div class="mt-4">
-        <%= form.label :authors, "Author(s)", class: "block font-medium text-gray-700" %>
-        <%= form.text_field :authors, placeholder: "Author(s) of the book", class: "mt-1 p-2 border border-gray-400 rounded-lg w-[80%]" %>
+      <div class="flex">
+        <%= form.input :authors %>
       </div>
-      <div class="flex flex-row mt-4">
-        <div class="mr-4 w-[65%]">
-          <%= form.label :isbn, "ISBN", class: "block font-medium text-gray-700" %>
-          <%= form.text_field :isbn, placeholder: "123-456-7890", class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
-        </div>
-        <div class="w-[35%]">
-          <%= form.label :course_number, "Course Number", class: "block font-medium text-gray-700" %>
-          <%= form.text_field :course_number, class: "mt-1 p-2 border border-gray-400 rounded-lg w-full", placeholder: "ABCD 123" %>
-        </div>
+      <div class="flex justify-between">
+        <%= form.input :isbn %>
+        <%= form.input :course_number, class: "ml-2" %>
       </div>
-      <div class="flex flex-row mt-4">
-        <div class="mr-4 w-[33%]">
-          <%= form.label :edition, "Edition", class: "block font-medium text-gray-700" %>
-          <%= form.text_field :edition, placeholder: "1st", class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
-        </div>
-        <div data-controller="lend-sell" class="flex flex-row w-[66%]">
-          <div class="w-[50%]">
-            <%= form.label :listing_type, "Lend or Sell" %>
-            <%= form.select :listing_type,
-            [['Lend', 'lend'], ['Sell', 'sell']],
-            { selected: @listing.listing_type },
-            { class: "mt-1 select select-primary w-full p-2 bg-transparent border border-gray-400 rounded-lg", id: "listing-type-select", "data-lend-sell-target": "input", "data-action": "change->lend-sell#determinePriceVisibility" } %>
-          </div>
-          <div id="price-field" class="ml-4 w-[50%]" data-lend-sell-target="priceInput">
-            <%= form.label :price, "Price (USD)", class: "block font-medium text-gray-700" %>
-            <%= form.number_field :price, placeholder: "12.99", step: 0.01, class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
-          </div>
-        </div>
+      <div class="flex flex-row justify-between", data-controller="lend-sell">
+        <%= form.input :edition %>
+        <%= form.input :listing_type, as: :select, collection: ["Lend", "Sell"] %>
+        <%= form.input :price, as: :integer %>
       </div>
-      <div class="mt-4">
-        <%= form.label :description, "Description", class: "block font-medium text-gray-700" %>
-        <%= form.text_area :description, placeholder: "Description of the book", class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
+      <div class="flex">
+        <%= form.input :description, as: :text, input_html: { rows: 5 } %>
       </div>
-      <div class="mt-4">
-        <%= form.submit "Done", class: "w-full p-2 bg-[#D1FFD9] text-[#00D438] font-semibold rounded-lg hover:bg-green-200 transition duration-300 ease-in-out" %>
-      </div>
-    </div>
-  </div>
-<% end %>
+    <% end %>
