@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-
   default_form_builder AppFormBuilder
 
   before_action do

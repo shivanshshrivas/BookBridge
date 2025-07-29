@@ -1,5 +1,4 @@
 class MyListingsController < ApplicationController
-
   def index
     @listings = current_user.listings
   end
