@@ -1,0 +1,10 @@
+<div class="flex flex-col items-center">
+  <div class="absolute top-5 left-5 font-bold text-2xl">Book<span class="text-blue-500">Bridge</span></div>
+  <div class=" w-[65%] items-center h-[100px] mt-20">
+    <h1 class="text-gray-900 font-semibold text-2xl">Add a listing</h1>
+    <p> Add all the details about the item</p>
+  </div>
+  <div class="w-[65%] -mt-5">
+    <%= render "form", listing: @listing %>
+  </div>
+</div>

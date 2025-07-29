@@ -63,3 +63,4 @@ gem "tailwindcss-rails", "~> 4.3"
 
 gem "trestle"
 gem "trestle-auth"
+gem "ransack"
