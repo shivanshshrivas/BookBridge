@@ -22,15 +22,15 @@
       <div>
         <%= form.input :title, input_html: { class: "w-full", placeholder: "Enter title" }, label: "Book Title" %>
       </div>
-      <div class="mt-4">
+      <div class="mt-4 grid grid-cols-[4fr_1fr] gap-4">
         <%= form.input :authors, input_html: { class: "w-full", placeholder: "Enter authors" }, label: "Author(s)" %>
       </div>
-      <div class="grid grid-cols-2  gap-4 mt-4">
-        <%= form.input :isbn, input_html: { class: "w-full", placeholder: "Enter ISBN" }, label: "ISBN" %>
-        <%= form.input :course_number, class: "ml-2", input_html: { class: "w-full", placeholder: "Enter course number" }, label: "Course Number" %>
+      <div class="grid grid-cols-[2fr_1fr] gap-4">
+        <%= form.input :isbn, input_html: { class: "w-full", placeholder: "123-456-7890" }, label: "ISBN" %>
+        <%= form.input :course_number, class: "ml-2", input_html: { class: "w-full", placeholder: "ABCD 123" }, label: "Course Number" %>
       </div>
       <div class="grid grid-cols-3 gap-4" data-controller="lend-sell">
-        <%= form.input :edition, input_html: { placeholder: "Enter edition" } %>
+        <%= form.input :edition, input_html: { placeholder: "3rd Edition" } %>
         <%= form.input :listing_type, as: :select, collection: ["Lend", "Sell"], input_html: { "data-lend-sell-target": "input", "data-action": "change->lend-sell#determinePriceVisibility" } %>
         <div data-lend-sell-target="priceInput" class="invisible">
           <%= form.input :price, as: :integer , input_html: {placeholder: "12.99", step: 0.01}, label: "Price (USD)" %>
