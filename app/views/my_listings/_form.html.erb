@@ -19,25 +19,27 @@
       </button>
     </div>
     <div class="flex flex-col ml-15 w-[60%]">
-      <div class="flex">
-        <%= form.input :title %>
+      <div>
+        <%= form.input :title, input_html: { class: "w-full", placeholder: "Enter title" }, label: "Book Title" %>
       </div>
-      <div class="flex">
-        <%= form.input :authors %>
+      <div class="mt-4">
+        <%= form.input :authors, input_html: { class: "w-full", placeholder: "Enter authors" }, label: "Author(s)" %>
       </div>
-      <div class="flex justify-between">
-        <%= form.input :isbn %>
-        <%= form.input :course_number, class: "ml-2" %>
+      <div class="grid grid-cols-2  gap-4 mt-4">
+        <%= form.input :isbn, input_html: { class: "w-full", placeholder: "Enter ISBN" }, label: "ISBN" %>
+        <%= form.input :course_number, class: "ml-2", input_html: { class: "w-full", placeholder: "Enter course number" }, label: "Course Number" %>
       </div>
-      <div class="flex flex-row justify-between", data-controller="lend-sell">
-        <%= form.input :edition %>
-        <%= form.input :listing_type, as: :select, collection: ["Lend", "Sell"] %>
-        <%= form.input :price, as: :integer %>
-      </div>
-      <div class="flex">
-        <%= form.input :description, as: :text, input_html: { rows: 5 } %>
+      <div class="grid grid-cols-3 gap-4" data-controller="lend-sell">
+        <%= form.input :edition, input_html: { placeholder: "Enter edition" } %>
+        <%= form.input :listing_type, as: :select, collection: ["Lend", "Sell"], input_html: { "data-lend-sell-target": "input", "data-action": "change->lend-sell#determinePriceVisibility" } %>
+        <div data-lend-sell-target="priceInput" class="invisible">
+          <%= form.input :price, as: :integer , input_html: {placeholder: "12.99", step: 0.01}, label: "Price (USD)" %>
+        </div>
       </div>
       <div>
-        <%= form.submit "Done" %>
+        <%= form.input :description, as: :text, input_html: { rows: 5, class: "w-full", placeholder: "Enter description" } %>
+      </div>
+      <div class="mt-4">
+        <%= form.submit "Done", class: "w-full p-2 bg-[#D1FFD9] text-[#00D438] font-semibold rounded-lg hover:bg-green-200 hover:cursor-pointer transition duration-300 ease-in-out" %>
       </div>
     <% end %>

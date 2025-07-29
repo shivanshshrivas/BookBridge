@@ -10,10 +10,12 @@ export default class extends Controller {
 
   determinePriceVisibility() {
     const selectedValue = this.inputTarget.value;
-    if (selectedValue === "sell") {
-      this.priceInputTarget.classList.remove("hidden");
+    if (selectedValue === "Sell") {
+      this.priceInputTarget.querySelector("input").disabled = false; 
+      this.priceInputTarget.classList.remove("invisible");
     } else {
-      this.priceInputTarget.classList.add("hidden");
+      this.priceInputTarget.querySelector("input").disabled = true;
+      this.priceInputTarget.classList.add("invisible");
     }
   }
 }

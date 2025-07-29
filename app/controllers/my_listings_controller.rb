@@ -10,7 +10,6 @@ class MyListingsController < ApplicationController
   def create
     @listing = current_user.listings.build(listing_params)
     @listing.university = current_user.university
-    @listing.price = (params[:listing][:listing_type] == "sell") ? params[:listing][:price] : nil
     if @listing.save
       redirect_to my_listings_path, notice: "Listing created successfully."
     else
