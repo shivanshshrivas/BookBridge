@@ -115,13 +115,13 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
 
   def string_input(method, options = {})
     form_group(method, options) do
-      string_field(method, merge_input_options({input_html: {class: "input input-bordered #{"input-error" if has_error?(method)}"}}, options))
+      string_field(method, merge_input_options({input_html: {class: "input input-bordered bg-transparent border border-gray-300 rounded-lg #{"input-error" if has_error?(method)}"}}, options))
     end
   end
 
   def text_input(method, options = {})
     form_group(method, options) do
-      text_area(method, merge_input_options({class: "input input-bordered min-h-20 #{"input-error" if has_error?(method)}"}, options[:input_html]))
+      text_area(method, merge_input_options({class: "input input-bordered bg-transparent border border-gray-300 rounded-lg min-h-20 #{"input-error" if has_error?(method)}"}, options[:input_html]))
     end
   end
 
@@ -194,7 +194,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     text_method = options[:text_method] || :to_s
 
     collection_input(method, options) do
-      collection_select(method, options[:collection], value_method, text_method, options, merge_input_options({class: "select select-bordered #{"is-invalid" if has_error?(method)}"}, options[:input_html]))
+      collection_select(method, options[:collection], value_method, text_method, options, merge_input_options({class: "select select-bordered bg-transparent border border-gray-300 rounded-lg #{"is-invalid" if has_error?(method)}"}, options[:input_html]))
     end
   end
 
