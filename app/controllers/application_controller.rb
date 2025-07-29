@@ -1,4 +1,7 @@
 class ApplicationController < ActionController::Base
+
+  default_form_builder AppFormBuilder
+
   before_action do
     if current_user&.email&.include?("@brandnewbox.com")
       Rack::MiniProfiler.authorize_request
@@ -6,6 +9,7 @@ class ApplicationController < ActionController::Base
   end
 
   before_action :set_sentry_context
+  before_action :authenticate_user!
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 

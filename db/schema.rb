@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_07_24_172559) do
+ActiveRecord::Schema[8.0].define(version: 2025_07_28_171716) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -45,15 +45,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_07_24_172559) do
   create_table "listings", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "isbn"
-    t.string "title"
-    t.string "authors"
+    t.string "title", null: false
+    t.string "authors", null: false
     t.string "edition"
     t.string "course_number"
-    t.text "description"
-    t.string "listing_type"
+    t.text "description", null: false
+    t.string "listing_type", null: false
     t.float "price"
     t.string "status", default: "available"
-    t.string "university"
+    t.string "university", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_listings_on_user_id"

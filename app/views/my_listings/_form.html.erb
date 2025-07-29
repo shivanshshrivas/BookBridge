@@ -1,8 +1,8 @@
 <%= form_with model: @listing, url: my_listings_path do |form| %>
   <div class="flex flex-row">
-    <div class="ml-5 w-[40%]">
-      <div class="custom-file-upload">
-        <label for="image-input" id="image-label" class="custom-label w-full border border-gray-300 border-dashed p-2 rounded-lg h-96 flex flex-col items-center justify-center cursor-pointer text-gray-700 hover:bg-gray-100 transition duration-200">
+    <div class="ml-5 w-[40%]" >
+      <div class="custom-file-upload" data-controller="clear-files">
+        <label for="image-input" id="image-label" class="custom-label w-full border border-gray-300 border-dashed p-2 rounded-lg h-96 flex flex-col items-center justify-center cursor-pointer text-gray-700 hover:bg-gray-100 transition duration-200", data-clear-files-target="imageLabel">
           <svg width="32px" height="32px" viewBox="0 0 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#545454ff" stroke-width="0">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -12,7 +12,7 @@
           </svg>
           Add photos
         </label>
-        <%= form.file_field :images, multiple: true, accept: "image/*", id: "image-input", class: "hidden", onchange: "updateImageLabel()" %>
+        <%= form.file_field :images, multiple: true, accept: "image/*", id: "image-input", class: "hidden", onchange: "updateImageLabel()", "data-clear-files-target": "fileInput", "data-action": "change->clear-files#updateImageLabel" %>
       </div>
       <button class="mt-4 w-full p-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300 ease-in-out" onclick="document.getElementById('image-input').value = ''">
         Clear
@@ -22,6 +22,9 @@
       <div>
         <%= form.label :title, "Book Title", class: "block font-medium text-gray-700" %>
         <%= form.text_field :title, autofocus: true, placeholder: "Title goes here", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+      </div>
+      <div>
+        <%= form.input :title %>
       </div>
       <div class="mt-4">
         <%= form.label :authors, "Author(s)", class: "block font-medium text-gray-700" %>
@@ -42,16 +45,18 @@
           <%= form.label :edition, "Edition", class: "block font-medium text-gray-700" %>
           <%= form.text_field :edition, placeholder: "1st", class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
         </div>
-        <div class="mr-4 w-[33%]">
-          <%= form.label :listing_type, "Lend or Sell" %>
-          <%= form.select :listing_type,
+        <div data-controller="lend-sell" class="flex flex-row w-[66%]">
+          <div class="w-[50%]">
+            <%= form.label :listing_type, "Lend or Sell" %>
+            <%= form.select :listing_type,
             [['Lend', 'lend'], ['Sell', 'sell']],
             { selected: @listing.listing_type },
-            { class: "mt-1 select select-primary w-full p-2 bg-transparent border border-gray-400 rounded-lg", id: "listing-type-select" } %>
-        </div>
-        <div id="price-field" class="w-[33%] hidden">
-          <%= form.label :price, "Price (USD)", class: "block font-medium text-gray-700" %>
-          <%= form.number_field :price, placeholder: "12.99", step: 0.01, class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
+            { class: "mt-1 select select-primary w-full p-2 bg-transparent border border-gray-400 rounded-lg", id: "listing-type-select", "data-lend-sell-target": "input", "data-action": "change->lend-sell#determinePriceVisibility" } %>
+          </div>
+          <div id="price-field" class="ml-4 w-[50%]" data-lend-sell-target="priceInput">
+            <%= form.label :price, "Price (USD)", class: "block font-medium text-gray-700" %>
+            <%= form.number_field :price, placeholder: "12.99", step: 0.01, class: "mt-1 p-2 border border-gray-400 rounded-lg w-full" %>
+          </div>
         </div>
       </div>
       <div class="mt-4">
@@ -63,25 +68,4 @@
       </div>
     </div>
   </div>
-  <script>
-    function updateImageLabel() {
-      const input = document.getElementById('image-input');
-      const label = document.getElementById('image-label');
-      if (input.files.length > 0) {
-        const fileNames = Array.from(input.files).map(file => file.name).join(', ');
-        label.textContent = input.files.length === 1 ? fileNames : `${input.files.length} files added`;
-      } else {
-        label.textContent = 'Add photos';
-      }
-    }
-
-    document.getElementById('listing-type-select').addEventListener('change', function() {
-      const priceField = document.getElementById('price-field');
-      if (this.value === 'sell') {
-        priceField.classList.remove('hidden');
-      } else {
-        priceField.classList.add('hidden');
-      }
-    });
-  </script>
 <% end %>
