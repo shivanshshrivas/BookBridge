@@ -51,7 +51,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
   def form_group(method, options = {}, &block)
     label(method, class: "form-control mb-3") do
       safe_join [
-        label_text(method, options[:label], class: "font-bold"),
+        label_text(method, options[:label], class: "text-gray-700"),
         block.call,
         hint_text(options[:hint]),
         error_text(method)
