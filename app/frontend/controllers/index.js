@@ -12,3 +12,6 @@ application.register("lend-sell", LendSellController)
 
 import ClearFilesController from "./clear_files_controller"
 application.register("clear-files", ClearFilesController)
+
+import SearchController from "./search_controller"
+application.register("search", SearchController)
