@@ -7,17 +7,17 @@
       </div>
       <div class=" grid grid-cols-[10fr_4fr_4fr_1fr] gap-2 mt-4" data-controller="search">
         <%= f.search_field :title_cont, placeholder: "Search by title", class: "p-2 border border-gray-400 rounded-lg", "data-search-target": "optionA" %>
-        <%= f.search_field :authors_cont, placeholder: "Search by authors", class: "p-2 border border-gray-400 rounded-lg hidden", "data-search-target": "optionB" %>
-        <%= f.search_field :isbn_cont, placeholder: "Search by ISBN", class: "p-2 border border-gray-400 rounded-lg hidden", "data-search-target": "optionC" %>
-        <%= f.search_field :course_number_cont, placeholder: "Search by course number", class: "p-2 border border-gray-400 rounded-lg hidden", "data-search-target": "optionD" %>
-        <select class="p-2 border border-gray-400 rounded-lg" data-search-target="input" data-action="change->search#updateVisibility">
+        <%= f.search_field :authors_cont, placeholder: "Search by authors", class: "p-2 border border-gray-400 rounded-lg", "data-search-target": "optionB" %>
+        <%= f.search_field :isbn_cont, placeholder: "Search by ISBN", class: "p-2 border border-gray-400 rounded-lg", "data-search-target": "optionC" %>
+        <%= f.search_field :course_number_cont, placeholder: "Search by course number", class: "p-2 border border-gray-400 rounded-lg", "data-search-target": "optionD" %>
+        <select class="p-2 border border-gray-400 rounded-lg" data-search-target="searchInput" data-action="change->search#updateVisibility">
           <option value="title">Title</option>
           <option value="authors">Authors</option>
           <option value="isbn">ISBN</option>
           <option value="course_number">Course Number</option>
         </select>
-        <%= f.select :listing_type_eq, options_for_select([["For Borrowing", "Lend"], ["For Buying", "Sell"]]), {}, class: "p-2 border border-gray-400 rounded-lg" %>
-        <button type="submit" class="bg-blue-500 text-white px-2.5 py-2 rounded-xl hover:bg-blue-600 transition duration-300 ease-in-out">
+        <%= f.select :listing_type_eq, options_for_select([["Borrow", "Lend"], ["Purchase", "Sell"], ["Either", ""]]), {}, class: "p-2 border border-gray-400 rounded-lg" %>
+        <button type="submit" class="bg-blue-500 text-white px-2.5 py-2 rounded-xl hover:bg-blue-600 hover:cursor-pointer transition duration-300 ease-in-out">
           <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
             <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -30,12 +30,14 @@
     <% end %>
   </div>
   <div class="mt-4 flex justify-center items-center w-[65%] min-h-[70vh]">
-    <% if @listings.empty? %>
+    <% if params[:q].blank? && @listings.empty? %>
       <p class="text-gray-800 text-3xl ">Looks like you haven't searched for anything</p>
-    <% else %>
+    <% elsif @listings.any? %>
       <% @listings.each do |listing| %>
         <%= listing.title %><br>
       <% end %>
+    <% else %>
+      <p class="text-gray-800 text-3xl">No listings found for your search criteria</p>
     <% end %>
   </div>
 </div>
