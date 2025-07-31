@@ -6,7 +6,7 @@ class Listing < ApplicationRecord
   validates :price, numericality: {greater_than_or_equal_to: 0}, allow_nil: true
 
   def self.ransackable_attributes(auth_object = nil)
-    %w[title authors listing_type isbn course_number university updated_at]
+    %w[title authors listing_type price isbn course_number university updated_at created_at]
   end
 
   def self.ransackable_associations(auth_object = nil)

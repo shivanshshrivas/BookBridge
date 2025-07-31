@@ -5,82 +5,75 @@
       <div class="absolute top-5 left-5 font-bold text-2xl">
         Book<span class="text-blue-500">Bridge</span>
       </div>
-      <div class=" grid grid-cols-[10fr_4fr_4fr_1fr] gap-2 mt-4" data-controller="search">
+      <div class=" grid grid-cols-[8fr_4fr_4fr_4fr_1fr] gap-2 mt-4 " data-controller="search">
         <%= f.search_field :title_cont, placeholder: "Search by title", class: "input bg-transparent w-full border border-gray-400 rounded-lg", "data-search-target": "optionA", value: params.dig(:q, :title_cont) %>
         <%= f.search_field :authors_cont, placeholder: "Search by authors", class: "input bg-transparent w-full border border-gray-400 rounded-lg", "data-search-target": "optionB", value: params.dig(:q, :authors_cont) %>
         <%= f.search_field :isbn_cont, placeholder: "Search by ISBN", class: "input bg-transparent w-full border border-gray-400 rounded-lg", "data-search-target": "optionC", value: params.dig(:q, :isbn_cont) %>
         <%= f.search_field :course_number_cont, placeholder: "Search by course number", class: "input bg-transparent w-full border border-gray-400 rounded-lg", "data-search-target": "optionD", value: params.dig(:q, :course_number_cont) %>
-        <select class="select border border-gray-400 bg-transparent rounded-lg" data-search-target="searchInput" data-action="change->search#updateVisibility" >
-          <option value="title">Title</option>
-          <option value="authors">Authors</option>
-          <option value="isbn">ISBN</option>
-          <option value="course_number">Course Number</option>
+        <select class="select border border-gray-400 bg-transparent rounded-lg" data-search-target="searchInput" data-action="change->search#updateVisibility" name="q[selected_input]">
+          <option value="title" <%= @selected_input == "title" ? "selected" : "" %>>Title</option>
+          <option value="authors" <%= @selected_input == "authors" ? "selected" : "" %>>Authors</option>
+          <option value="isbn" <%= @selected_input == "isbn" ? "selected" : "" %>>ISBN</option>
+          <option value="course_number" <%= @selected_input == "course_number" ? "selected" : "" %>>Course Number</option>
         </select>
         <%= f.select :listing_type_eq, options_for_select([ ["Borrow", "Lend"], ["Purchase", "Sell"], ["Either", ""] ], params.dig(:q, :listing_type_eq)), { include_blank: "Select Listing Type" }, class: "select border border-gray-400 rounded-lg bg-transparent" %>
-        <button type="submit" class="bg-blue-500 text-white px-2.5 py-2 rounded-xl hover:bg-blue-600 hover:cursor-pointer transition duration-300 ease-in-out">
-          <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-            <g id="SVGRepo_iconCarrier">
-              <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#ffffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
-            </g>
-          </svg>
-        </button>
-      </div>
-    <% end %>
-  </div>
-  <% if params[:q].blank? && @listings.empty? %>
-    <div class="mt-10 w-[65%] min-h-[70vh] flex items-center justify-center">
-      <p class="text-gray-800 text-3xl">Looks like you haven't searched for anything</p>
-    </div>
-  <% elsif @listings.empty? %>
-    <div class="mt-10 w-[65%] min-h-[70vh] flex items-center justify-center">
-      <p class="text-gray-800 text-3xl">No listings found</p>
-    </div>
-  <% else %>
-    <div class="mt-4 w-[65%] min-h-[70vh] flex flex-col">
-      <div class="flex items-center justify-between">
-        <p> <%= @listings.count %> results found for your search. </p>
-        <select class="select border border-gray-400 rounded-lg bg-transparent w-40" disabled>
-          <option value="title_asc">Title (A-Z)</option>
-          <option value="title_desc">Title (Z-A)</option>
-          <option value="price_asc">Price (Low to High)</option>
-          <option value="price_desc">Price (High to Low)</option>
-          <option value="recent">Most Recent</option>
-          <option value="oldest">Oldest</option>
-        </select>
-      </div>
-      <% @listings.each do |listing| %>
-        <div class="overflow-y-auto grid grid-cols-[1fr_5fr_0.25fr] gap-8 mt-4 border-b border-gray-300 pb-4">
-          <div>
-            <% if listing.images.attached? %>
-              <%= image_tag listing.images.first, alt: listing.title, class: "w-64 aspect-[3/4] object-cover rounded-xl" %>
-            <% else %>
-              <div class="h-16 w-16 bg-gray-100 border flex items-center justify-center text-gray-400 text-xs rounded">
-                No Image
-              </div>
-            <% end %>
-          </div>
-          <div class="py-2 flex flex-col justify-between ">
-            <div>
-              <h3 class="text-lg font-semibold"><%= link_to listing.title, listing_path(listing) %></h3>
-              <p class="text-gray-600"><%= listing.authors %></p>
-              <p class="text-gray-600">Published on: <%= listing.created_at.strftime("%B %d, %Y") %></p>
-              <p class="text-gray-600"><%= User.find(listing.user_id).name %></p>
-              <p class="text-gray-800 font-bold"><%= number_to_currency(listing.price) %></p>
-            </div>
-            <div class="flex flex-row">
-              <p><%= listing.course_number %></p>
-              <p class="ml-4"><%= listing.isbn %></p>
-              <p class="ml-4"><%= listing.listing_type %></p>
-            </div>
-          </div>
-          <div class="flex flex-row justify-between">
-            <p>A</p>
-            <p>B</p>
-          </div>
+        <%= f.select :sorts, options_for_select([ ["Title (A-Z)", "title asc"], ["Title (Z-A)", "title desc"], ["Price (Low to High)", "price asc"], ["Price (High to Low)", "price desc"], ["Most Recent", "created_at desc"], ["Oldest", "created_at asc"] ], params.dig(:q, :sorts)), { include_blank: "Sort by" }, class: "select border border-gray-400 rounded-lg bg-transparent" %>
+        <button type="submit" class="bg-blue-500 text-white w-10 px-2.5 py-2 rounded-xl hover:bg-blue-600 hover:cursor-pointer transition duration-300 ease-in-out">
+            <svg width="22px" height="22px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier">
+                <path d="M15.7955 15.8111L21 21M18 10.5C18 14.6421 14.6421 18 10.5 18C6.35786 18 3 14.6421 3 10.5C3 6.35786 6.35786 3 10.5 3C14.6421 3 18 6.35786 18 10.5Z" stroke="#ffffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+              </g>
+            </svg>
+          </button>
         </div>
       <% end %>
     </div>
-  <% end %>
-</div>
+    <% if params[:q].blank? && @listings.empty? %>
+      <div class="mt-10 w-[65%] min-h-[70vh] flex items-center justify-center">
+        <p class="text-gray-800 text-3xl">Looks like you haven't searched for anything</p>
+      </div>
+    <% elsif @listings.empty? %>
+      <div class="mt-10 w-[65%] min-h-[70vh] flex items-center justify-center">
+        <p class="text-gray-800 text-3xl">No listings found</p>
+      </div>
+    <% else %>
+      <div class="mt-4 w-[65%] min-h-[70vh] flex flex-col">
+        <div class="flex items-center justify-between">
+          <p> <%= @listings.count %> results found for your search. </p>
+        </div>
+        <% @listings.each do |listing| %>
+          <div class="overflow-y-auto grid grid-cols-[1fr_5fr_0.25fr] gap-8 mt-4 border-b border-gray-300 pb-4">
+            <div>
+              <% if listing.images.attached? %>
+                <%= image_tag listing.images.first, alt: listing.title, class: "w-64 aspect-[3/4] object-cover rounded-xl" %>
+              <% else %>
+                <div class="w-36 aspect-[3/4] bg-gray-100 border flex items-center justify-center text-gray-400 text-xs rounded-xl">
+                  No Image
+                </div>
+              <% end %>
+            </div>
+            <div class="py-2 flex flex-col justify-between ">
+              <div>
+                <h3 class="text-lg font-semibold"><%= link_to listing.title, listing_path(listing) %></h3>
+                <p class="text-gray-600"><%= listing.authors %></p>
+                <p class="text-gray-600">Published on: <%= listing.created_at.strftime("%B %d, %Y") %></p>
+                <p class="text-gray-600"><%= User.find(listing.user_id).name %></p>
+                <p class="text-gray-800 font-bold"><%= number_to_currency(listing.price) %></p>
+              </div>
+              <div class="flex flex-row">
+                <p><%= listing.course_number %></p>
+                <p class="ml-4"># <%= listing.isbn %></p>
+                <p class="ml-4"><%= listing.listing_type %></p>
+              </div>
+            </div>
+            <div class="flex flex-row justify-between">
+              <p>A</p>
+              <p>B</p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
