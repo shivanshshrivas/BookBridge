@@ -16,11 +16,11 @@ class ApplicationController < ActionController::Base
   allow_browser versions: :modern
 
   def after_sign_in_path_for(resource)
-    home_index_path
+    listings_path
   end
 
   def after_sign_up_path_for(resource)
-    home_index_path
+    listings_path
   end
 
   def after_sign_out_path_for(resource_or_scope)

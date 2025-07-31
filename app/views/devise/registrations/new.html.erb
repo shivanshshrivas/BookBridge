@@ -9,22 +9,22 @@
       <%= render "devise/shared/error_messages", resource: resource %>
       <div class="mb-4">
         <%= f.label :name, class: "block text-sm font-medium text-gray-700" %>
-        <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "John Doe", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "John Doe", class: "mt-1 input bg-transparent w-full border border-gray-400 rounded-lg" %>
       </div>
       <div class="mb-4">
         <%= f.label :email, "University email address", class: "block text-sm font-medium text-gray-700" %>
-        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "johndoe@university.edu", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "johndoe@university.edu", class: "mt-1 input bg-transparent w-full border border-gray-400 rounded-lg" %>
       </div>
       <div class="mb-4">
         <%= f.label :password, class: "text-sm font-medium text-gray-700" %>
         <% if @minimum_password_length %>
           <em class="text-xs text-gray-500">(<%= @minimum_password_length %> characters minimum)</em>
         <% end %>
-        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+        <%= f.password_field :password, autocomplete: "new-password", placeholder: "Password", class: "mt-1 input bg-transparent w-full border border-gray-400 rounded-lg" %>
       </div>
       <div class="mb-6">
         <%= f.label :password_confirmation, "Confirm password", class: "block text-sm font-medium text-gray-700" %>
-        <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Re-type password", class: "mt-1 p-2 w-full border border-gray-400 rounded-lg" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", placeholder: "Re-type password", class: "mt-1 input bg-transparent w-full border border-gray-400 rounded-lg" %>
       </div>
       <div class="actions">
         <%= f.submit "Sign up", class: "w-full p-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 hover:cursor-pointer transition duration-300 ease-in-out" %>
