@@ -15,3 +15,6 @@ application.register("clear-files", ClearFilesController)
 
 import SearchController from "./search_controller"
 application.register("search", SearchController)
+
+import ImageSwitchController from "./image_switch_controller"
+application.register("image-switch", ImageSwitchController)
