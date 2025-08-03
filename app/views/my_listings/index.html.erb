@@ -27,11 +27,12 @@
             <p><%= listing.course_number %></p>
             <p class="ml-4"># <%= listing.isbn %></p>
             <p class="ml-4"><%= listing.listing_type %></p>
+            <p class="ml-4"><%= listing.status %></p>
           </div>
         </div>
-        <div class="flex flex-row justify-between">
-          <p>A</p>
-          <p>B</p>
+        <div class="flex flex-col items-between">
+          <%= link_to 'Edit', edit_my_listing_path(listing), class: "text-blue-500 hover:underline mb-2" %>
+          <%= button_to 'Delete', my_listing_path(listing), method: :delete, data: { confirm: 'Are you sure?' }, class: "text-red-500 hover:underline" %>
         </div>
       </div>
     <% end %>
