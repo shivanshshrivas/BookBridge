@@ -24,10 +24,21 @@
             <p class="text-gray-800 font-bold"><%= number_to_currency(listing.price) %></p>
           </div>
           <div class="flex flex-row">
-            <p><%= listing.course_number %></p>
-            <p class="ml-4"># <%= listing.isbn %></p>
-            <p class="ml-4"><%= listing.listing_type %></p>
-            <p class="ml-4"><%= listing.status %></p>
+            <% if listing.course_number.present? %>
+              <p><%= listing.course_number %></p>
+            <% end %>
+            <% if listing.edition.present? %>
+              <p class="ml-4"><%= listing.edition %></p>
+            <% end %>
+            <% if listing.isbn.present? %>
+              <p class="ml-4"># <%= listing.isbn %></p>
+            <% end %>
+            <% if listing.listing_type.present? %>
+              <p class="ml-4"><%= listing.listing_type %></p>
+            <% end %>
+            <% if listing.status.present? %>
+              <p class="ml-4"><%= listing.status %></p>
+            <% end %>
           </div>
         </div>
         <div class="flex flex-col gap-2">
