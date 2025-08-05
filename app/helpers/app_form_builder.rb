@@ -72,7 +72,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
     return if text == false
     text ||= method.to_s.humanize
     tag.div(class: "label #{options[:class]}") do
-      tag.span(text, class: "label-text")
+      tag.span(text, class: "label-text text-gray-700")
     end
   end
 
@@ -144,7 +144,7 @@ class AppFormBuilder < ActionView::Helpers::FormBuilder
       safe_join [
         label(method, options[:label], class: "label cursor-pointer py-1 justify-start") {
           safe_join [
-            check_box(method, merge_input_options({class: "checkbox me-2"}, options[:input_html])),
+            check_box(method, merge_input_options({class: "checkbox checkbox-sm border-gray-400 rounded-md me-2 "}, options[:input_html])),
             label_text(method, options[:label])
           ]
         },

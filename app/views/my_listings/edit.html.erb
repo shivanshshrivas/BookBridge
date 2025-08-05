@@ -1,4 +1,10 @@
-<div>
-  <h1 class="font-bold text-4xl">MyListings#edit</h1>
-  <p>Find me in app/views/my_listings/edit.html.erb</p>
+<div class="flex flex-col items-center">
+  <div class="absolute top-5 left-5 font-bold text-2xl">Book<span class="text-blue-500">Bridge</span></div>
+  <div class=" w-[65%] items-center mt-20">
+    <h1 class="text-gray-900 font-semibold text-2xl">Edit Listing</h1>
+    <p> Update the details about the item</p>
+  </div>
+  <div class="w-[65%] mt-4">
+    <%= render "form", listing: @listing %>
+  </div>
 </div>
