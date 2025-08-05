@@ -6,11 +6,18 @@
           Add photos
         </label>
         <% @listing.images.each do |image| %>
-          <%= form.hidden_field :images, multiple: true, value: image.signed_id %>
+          <%= form.hidden_field :images, id: "image-existing",  multiple: true, value: image.signed_id %>
         <% end %>
         <%= form.file_field :images, multiple: true, accept: "image/*", id: "image-input", class: "hidden", "data-clear-files-target": "fileInput", "data-action": "change->clear-files#updateImageLabel" %>
       </div>
-      <button class="mt-4 w-full p-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300 ease-in-out" onclick="document.getElementById('image-input').value = ''">
+      <div class="grid grid-cols-4 gap-4 mt-4">
+        <% @listing.images.each do |image| %>
+          <div class="relative">
+            <img src="<%= url_for(image) %>" alt="Listing Image" class="w-full aspect-[3/4] object-cover rounded-lg border border-gray-300">
+          </div>
+        <% end %>
+      </div>
+      <button class="mt-4 w-full p-2 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition duration-300 ease-in-out" onclick="document.getElementById('image-input').value = ''; document.querySelectorAll('#image-existing').forEach(el => el.remove());">
         Clear
       </button>
     </div>
