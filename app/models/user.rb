@@ -4,6 +4,8 @@ class User < ApplicationRecord
 
   has_one_attached :profile_picture
   has_many :listings, dependent: :destroy
+  has_many :saved_items, dependent: :destroy
+  has_many :saved_listings, through: :saved_items, source: :listing
 
   devise :database_authenticatable, :registerable,
     :recoverable, :rememberable, :validatable
