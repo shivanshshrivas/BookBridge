@@ -3,6 +3,7 @@ class MyListingsController < ApplicationController
 
   def index
     @listings = current_user.listings
+    @saved_listings = current_user.saved_listings.includes(:user, images_attachments: :blob)
   end
 
   def new

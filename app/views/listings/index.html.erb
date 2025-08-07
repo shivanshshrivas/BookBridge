@@ -44,35 +44,8 @@
           <p> <%= @listings.count %> results found for your search. </p>
         </div>
         <% @listings.each do |listing| %>
-          <div class="overflow-y-auto grid grid-cols-[1fr_5fr_0.25fr] gap-8 mt-4 border-b border-gray-300 pb-4">
-            <div>
-              <% if listing.images.attached? %>
-                <%= image_tag listing.images.first, alt: listing.title, class: "w-64 aspect-[3/4] object-cover rounded-xl" %>
-              <% else %>
-                <div class="w-36 aspect-[3/4] bg-gray-100 border flex items-center justify-center text-gray-400 text-xs rounded-xl">
-                  No Image
-                </div>
-              <% end %>
-            </div>
-            <div class="py-2 flex flex-col justify-between ">
-              <div>
-                <h3 class="text-lg font-semibold"><%= link_to listing.title, listing_path(listing) %></h3>
-                <p class="text-gray-600"><%= listing.authors %></p>
-                <p class="text-gray-600">Published on: <%= listing.created_at.strftime("%B %d, %Y") %></p>
-                <p class="text-gray-600"><%= User.find(listing.user_id).name %></p>
-                <p class="text-gray-800 font-bold"><%= number_to_currency(listing.price) %></p>
-              </div>
-              <div class="flex flex-row">
-                <p><%= listing.course_number %></p>
-                <p class="ml-4"># <%= listing.isbn %></p>
-                <p class="ml-4"><%= listing.listing_type %></p>
-              </div>
-            </div>
-            <div class="flex flex-row justify-between">
-              <p>A</p>
-              <p>B</p>
-            </div>
-          </div>
+          <% saved_item = current_user.saved_items.find_by(listing_id: listing.id) %>
+          <%= render ListingCardComponent.new(listing: listing, mode: :saved, saved_item: saved_item) %>
         <% end %>
       </div>
     <% end %>

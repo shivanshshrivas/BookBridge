@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
   resources :listings, only: [:index, :show]
+
+  resources :listings do
+    resources :saved_items, only: [:create, :destroy]
+  end
+
   resources :my_listings, except: [:show]
   get "home/index"
   devise_for :users

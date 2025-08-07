@@ -1,51 +1,25 @@
-<div class="flex flex-col items-center">
+<div class="flex flex-col items-center" data-controller="dropdown-toggle">
   <div class="absolute top-5 left-5 font-bold text-2xl">Book<span class="text-blue-500">Bridge</span></div>
   <div class=" w-[65%] items-center mt-20">
     <h1 class="text-gray-900 font-semibold text-2xl">My Listings</h1>
   </div>
-  <div class="w-[65%] min-h-[70vh] flex flex-col">
+  <div class="somepeer w-[65%] flex justify-end">
+    <select class="select w-50 border border-gray-400 bg-transparent rounded-lg mt-4 mb-4" data-action="change->dropdown-toggle#toggleDropdown" data-dropdown-toggle-target="dropdown">
+      <option value="all">My Listings</option>
+      <option value="saved">Saved Listings</option>
+    </select>
+  </div>
+  <!-- My Listings -->
+  <div class="w-[65%] min-h-[70vh] flex flex-col" data-dropdown-toggle-target="all">
     <% @listings.each do |listing| %>
-      <div class="overflow-y-auto grid grid-cols-[1fr_5fr_0.25fr] gap-8 mt-4 border-b border-gray-300 pb-4">
-        <div>
-          <% if listing.images.attached? %>
-            <%= image_tag listing.images.first, alt: listing.title, class: "w-64 aspect-[3/4] object-cover rounded-xl" %>
-          <% else %>
-            <div class="w-36 aspect-[3/4] bg-gray-100 border flex items-center justify-center text-gray-400 text-xs rounded-xl">
-              No Image
-            </div>
-          <% end %>
-        </div>
-        <div class="py-2 flex flex-col justify-between ">
-          <div>
-            <h3 class="text-lg font-semibold"><%= link_to listing.title, listing_path(listing) %></h3>
-            <p class="text-gray-600"><%= listing.authors %></p>
-            <p class="text-gray-600">Published on: <%= listing.created_at.strftime("%B %d, %Y") %></p>
-            <p class="text-gray-600"><%= User.find(listing.user_id).name %></p>
-            <p class="text-gray-800 font-bold"><%= number_to_currency(listing.price) %></p>
-          </div>
-          <div class="flex flex-row">
-            <% if listing.course_number.present? %>
-              <p><%= listing.course_number %></p>
-            <% end %>
-            <% if listing.edition.present? %>
-              <p class="ml-4"><%= listing.edition %></p>
-            <% end %>
-            <% if listing.isbn.present? %>
-              <p class="ml-4"># <%= listing.isbn %></p>
-            <% end %>
-            <% if listing.listing_type.present? %>
-              <p class="ml-4"><%= listing.listing_type %></p>
-            <% end %>
-            <% if listing.status.present? %>
-              <p class="ml-4"><%= listing.status %></p>
-            <% end %>
-          </div>
-        </div>
-        <div class="flex flex-col gap-2">
-          <%= link_to "Edit", edit_my_listing_path(listing), class: "bg-blue-100 w-20 p-2 rounded-lg text-center hover:bg-blue-200 hover:cursor-pointer transition duration-300 ease-in-out font-semibold text-blue-500" %>
-          <%= button_to "Delete", my_listing_path(listing), method: :delete, data: { confirm: 'Are you sure?' }, class: "bg-red-100 w-20 p-2 rounded-lg text-center hover:bg-red-200 hover:cursor-pointer transition duration-300 ease-in-out font-semibold text-red-500" %>
-        </div>
-      </div>
+      <%= render ListingCardComponent.new(listing: listing, mode: :editable) %>
+    <% end %>
+  </div>
+  <!-- Saved Listings -->
+  <div class="w-[65%] min-h-[70vh] flex flex-col hidden" data-dropdown-toggle-target="saved">
+    <% @saved_listings.each do |listing| %>
+      <% saved_item = current_user.saved_items.find_by(listing_id: listing.id) %>
+      <%= render ListingCardComponent.new(listing: listing, mode: :saved, saved_item: saved_item) %>
     <% end %>
   </div>
 </div>

@@ -18,3 +18,6 @@ application.register("search", SearchController)
 
 import ImageSwitchController from "./image_switch_controller"
 application.register("image-switch", ImageSwitchController)
+
+import DropdownToggleController from "./dropdown_toggle_controller"
+application.register("dropdown-toggle", DropdownToggleController)
