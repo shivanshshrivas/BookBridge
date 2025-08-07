@@ -41,9 +41,17 @@
         <div class="mt-4 flex flex-row gap-4"> <!-- Message and Save buttons -->
           <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Message</button>
           <% if current_user.saved_listings.include?(@listing) %>
-            <%= button_to 'Unsave', listing_saved_item_path(@listing), method: :delete, class: "text-blue-500" %>
+            <%= button_to listing_saved_item_path(@listing), method: :delete, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
+              <svg fill="#00D438" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="fill: #00D438;"></path>
+              </svg>
+            <% end %>
           <% else %>
-            <%= button_to 'Save', listing_saved_items_path(@listing), method: :post, class: "text-gray-500" %>
+            <%= button_to listing_saved_items_path(@listing), method: :post, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
+              <svg fill="none" stroke="#00D438" stroke-width="2" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="stroke: #00D438;"></path>
+              </svg>
+            <% end %>
           <% end %>
         </div>
         <div class="mt-4"> <!-- User.find by user_id, and Description -->
