@@ -3,12 +3,12 @@ class SavedItemsController < ApplicationController
 
   def create
     current_user.saved_items.create(listing: @listing)
-    redirect_to request.referer, notice: "Listing saved successfully."
+    redirect_back fallback_location: root_path, notice: "Listing saved successfully."
   end
 
   def destroy
     current_user.saved_items.find_by(listing: @listing)&.destroy
-    redirect_to request.referer, notice: "Listing unsaved successfully."
+    redirect_back fallback_location: root_path, notice: "Listing removed from saved items."
   end
 
   private
