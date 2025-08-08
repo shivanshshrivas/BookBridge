@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get "transactions/index"
+  get "transactions/show"
+  get "transactions/update"
+  get "messages/index"
+  get "messages/show"
+  get "messages/create"
   resources :listings, only: [:index, :show]
 
   resources :listings do
