@@ -1,6 +1,6 @@
 <!-- app/views/messages/_transaction_card.html.erb -->
 <% txn = message.messageable %>
-<div class="my-2 p-3 rounded-lg border bg-white shadow-sm text-xs space-y-1">
+<div class="my-2 p-3 rounded-xl bg-gray-100 text-xs space-y-1 w-2/5">
   <div class="font-semibold text-gray-700 text-sm"><%= message.listing.title %></div>
   <div class="text-gray-500">Status: <span class="font-medium"><%= txn.status.humanize %></span></div>
   <% if message.listing.listing_type == "lend" %>
@@ -11,12 +11,12 @@
     <%= button_to "Got the book",
       transaction_path(txn, mark: "got_the_book"),
       method: :patch,
-      class: "mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md" %>
+      class: "mt-2 px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-[11px]" %>
   <% end %>
   <% if current_user.id == message.sender_id && txn.pending? %>
     <%= button_to "Cancel",
       transaction_path(txn, transaction: { status: :cancelled }),
       method: :patch,
-      class: "mt-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md" %>
+      class: "mt-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-md text-[11px]" %>
   <% end %>
 </div>

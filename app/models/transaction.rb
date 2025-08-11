@@ -9,6 +9,8 @@ class Transaction < ApplicationRecord
   validate :parties_are_distinct
   validate :lend_requires_end_date
 
+  after_save :sync_listing_status, if: :saved_change_to_status?
+
   private
 
   def lend_requires_end_date
@@ -23,6 +25,26 @@ class Transaction < ApplicationRecord
   def parties_are_distinct
     if lender_id == borrower_id
       errors.add(:base, "Lender and borrower must be distinct users")
+    end
+  end
+
+  def sync_listing_status
+    return unless listing
+    case status.to_sym
+    when :in_progress
+      # Lend starts or sell implicitly progresses -> make item unavailable
+      listing.update_column(:status, 'unavailable')
+    when :completed
+      if listing.listing_type == 'Lend'
+        listing.update_column(:status, 'available')
+      else # Sell
+        listing.update_column(:status, 'unavailable')
+      end
+    when :cancelled
+      # If a lend was cancelled and not completed, make available again
+      if listing.listing_type == 'Lend'
+        listing.update_column(:status, 'available')
+      end
     end
   end
 end

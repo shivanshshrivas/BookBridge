@@ -1,7 +1,8 @@
 <!-- Sidebar thread list -->
-<div class="w-full md:w-80 border-r h-full flex flex-col bg-gray-50">
-  <div class="p-3 border-b">
-    <input class="w-full border border-gray-300 focus:ring-2 focus:ring-blue-400 p-2 text-sm rounded" placeholder="Search conversations" />
+<div class="w-full md:w-80 border-r border-gray-300 h-full flex flex-col bg-gray-50">
+  <div class=" p-3">
+    <h2 class="text-lg font-semibold">Messages</h2>
+    <input class="mt-2 w-full border border-gray-300 focus:ring-2 focus:ring-blue-400 p-2 text-sm rounded" placeholder="Search conversations" />
   </div>
   <div class="flex-1 overflow-y-auto">
     <% if threads.blank? %>

@@ -25,13 +25,19 @@ class TransactionsController < ApplicationController
         @transaction.status = :completed
       end
     else
-      @transaction.assign_attributes(update_params)
+      @transaction.assign_attributes(transaction_params)
+      # Auto-set start date when moving a lend to in_progress the first time
+      if @transaction.listing.listing_type == "Lend" && @transaction.status.to_s == "in_progress" && @transaction.start_date.blank?
+        @transaction.start_date = Time.zone.today
+      end
     end
 
-    if @transaction.save
-      redirect_back fallback_location: transaction_path(@transaction), notice: "Transaction updated."
-    else
-      redirect_back fallback_location: transaction_path(@transaction), alert: @transaction.errors.full_messages.to_sentence
+    respond_to do |format|
+      if @transaction.save
+        format.html { redirect_to transaction_path(@transaction), notice: "Transaction updated." }
+      else
+        format.html { render :show, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -46,7 +52,7 @@ class TransactionsController < ApplicationController
     head :forbidden unless allowed
   end
 
-  def update_params
-    params.require(:transaction).permit(:status, :start_date, :end_date)
+  def transaction_params
+    params.fetch(:transaction, {}).permit(:status, :start_date, :end_date)
   end
 end
