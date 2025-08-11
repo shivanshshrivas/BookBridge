@@ -33,17 +33,17 @@ class Transaction < ApplicationRecord
     case status.to_sym
     when :in_progress
       # Lend starts or sell implicitly progresses -> make item unavailable
-      listing.update_column(:status, 'unavailable')
+      listing.update_column(:status, "Unavailable")
     when :completed
-      if listing.listing_type == 'Lend'
-        listing.update_column(:status, 'available')
+      if listing.listing_type == "Lend"
+        listing.update_column(:status, "Available")
       else # Sell
-        listing.update_column(:status, 'unavailable')
+        listing.update_column(:status, "Unavailable")
       end
     when :cancelled
       # If a lend was cancelled and not completed, make available again
-      if listing.listing_type == 'Lend'
-        listing.update_column(:status, 'available')
+      if listing.listing_type == "Lend"
+        listing.update_column(:status, "Available")
       end
     end
   end
