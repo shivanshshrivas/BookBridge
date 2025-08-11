@@ -4,7 +4,7 @@ class Message < ApplicationRecord
   belongs_to :receiver, class_name: "User"
   belongs_to :messageable, polymorphic: true
 
-  validates :participants_are_distinct
+  validate :participants_are_distinct
 
   scope :between, ->(u1, u2, listing_id) {
     where(listing_id:, sender_id: [u1, u2], receiver_id: [u1, u2]).order(:created_at)
