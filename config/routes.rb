@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  get "transactions/index"
+  get "transactions/show"
+  get "transactions/update"
+  resources :messages, only: [:index, :create]
+  get "messages/thread/:listing_id/:user_id", to: "messages#show", as: :message_thread
+
+  resources :transactions, only: [:index, :show, :update]
   resources :listings, only: [:index, :show]
 
   resources :listings do

@@ -1,0 +1,70 @@
+<div class="flex flex-col items-center w-full">
+  <div class="absolute top-5 left-5 font-bold text-2xl">Book<span class="text-blue-500">Bridge</span></div>
+  <div class="w-[65%] mt-20">
+    <h1 class="text-2xl font-semibold mb-6">Manage Transaction</h1>
+    <% if @transaction.errors.any? %>
+      <div class="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded p-3">
+        <p class="font-semibold mb-1">Couldn't save:</p>
+        <ul class="list-disc ml-5 space-y-1">
+          <% @transaction.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+    <%= render ListingCardComponent.new(listing: @transaction.listing, mode: :transaction, transaction: @transaction, current_user: current_user) %>
+    <div class="mt-6 p-6 bg-white border rounded-lg space-y-4">
+      <div class="grid grid-cols-2 gap-6 text-sm">
+        <div>
+          <div class="text-gray-500">Status</div>
+          <div class="font-medium capitalize"><%= @transaction.status.humanize %></div>
+        </div>
+        <div>
+          <div class="text-gray-500">Listing Type</div>
+          <div class="font-medium"><%= @transaction.listing.listing_type %></div>
+        </div>
+        <div>
+          <div class="text-gray-500">Lender</div>
+          <div class="font-medium"><%= @transaction.lender.name %></div>
+        </div>
+        <div>
+          <div class="text-gray-500">Borrower</div>
+          <div class="font-medium"><%= @transaction.borrower.name %></div>
+        </div>
+        <div>
+          <div class="text-gray-500">Start Date</div>
+          <div class="font-medium"><%= @transaction.start_date || '—' %></div>
+        </div>
+        <div>
+          <div class="text-gray-500">End Date</div>
+          <div class="font-medium"><%= @transaction.end_date || '—' %></div>
+        </div>
+      </div>
+      <% owner = current_user.id == @transaction.lender_id %>
+      <% if owner %>
+        <h2 class="font-semibold text-lg mt-4">Update</h2>
+        <%= form_with model: @transaction, url: transaction_path(@transaction), method: :patch, local: true, class: 'space-y-4' do |f| %>
+          <div class="grid grid-cols-3 gap-4 items-end">
+            <% if @transaction.listing.listing_type == 'Lend' %>
+              <div>
+                <label class="text-xs text-gray-500">End Date</label>
+                <%= f.date_field :end_date, class: "mt-1 w-full border rounded px-2 py-2 text-sm" %>
+              </div>
+            <% end %>
+            <div>
+              <label class="text-xs text-gray-500">Status</label>
+              <%= f.select :status, Transaction.statuses.keys.map { |s| [s.humanize, s] }, {}, class: "mt-1 w-full border rounded px-2 py-2 text-sm" %>
+            </div>
+            <div class="flex gap-2 items-end">
+              <button class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm">Save</button>
+              <%= link_to 'Back', transactions_path, class: 'px-4 py-2 rounded-lg text-sm border' %>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="pt-4 text-sm text-gray-500">Only the lender can manage this transaction.</div>
+        <%= link_to 'Back', transactions_path, class: 'mt-4 inline-block px-4 py-2 rounded-lg text-sm border' %>
+      <% end %>
+    </div>
+  </div>
+</div>

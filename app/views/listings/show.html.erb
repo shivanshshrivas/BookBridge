@@ -39,7 +39,8 @@
           <p class="text-gray-800 font-bold text-xl"><%= number_to_currency(@listing.price) %></p>
         </div>
         <div class="mt-4 flex flex-row gap-4"> <!-- Message and Save buttons -->
-          <button class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Message</button>
+          <%= link_to "Message",
+      message_thread_path(listing_id: @listing.id, user_id: @listing.user_id), class: "px-4 py-2 bg-blue-500 text-white rounded" %>
           <% if current_user.saved_listings.include?(@listing) %>
             <%= button_to listing_saved_item_path(@listing), method: :delete, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
               <svg fill="#00D438" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
