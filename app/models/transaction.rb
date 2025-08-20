@@ -42,7 +42,7 @@ class Transaction < ApplicationRecord
     when :cancelled
       # If a lend was cancelled and not completed, make available again
       if listing.listing_type == "Lend"
-        listing.update(status:      "Available")
+        listing.update(status: "Available")
       end
     end
   end
