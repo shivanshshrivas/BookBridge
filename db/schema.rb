@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_20_192905) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_185506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -61,12 +61,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_192905) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "listing_id", null: false
+    t.bigint "sender_id", null: false
+    t.bigint "receiver_id", null: false
     t.string "messageable_type", null: false
     t.bigint "messageable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "sender_id"
-    t.bigint "receiver_id"
     t.index ["listing_id"], name: "index_messages_on_listing_id"
     t.index ["messageable_type", "messageable_id"], name: "index_messages_on_messageable"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
@@ -90,13 +90,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_20_192905) do
 
   create_table "transactions", force: :cascade do |t|
     t.bigint "listing_id", null: false
+    t.bigint "lender_id", null: false
+    t.bigint "borrower_id", null: false
     t.date "start_date"
     t.date "end_date"
     t.integer "status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "lender_id"
-    t.bigint "borrower_id"
     t.index ["borrower_id"], name: "index_transactions_on_borrower_id"
     t.index ["lender_id"], name: "index_transactions_on_lender_id"
     t.index ["listing_id"], name: "index_transactions_on_listing_id"
