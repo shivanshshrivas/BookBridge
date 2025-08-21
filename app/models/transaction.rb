@@ -6,21 +6,14 @@ class Transaction < ApplicationRecord
 
   enum :status, {pending: 0, in_progress: 1, completed: 2, cancelled: 3}
 
-  validate :lend_requires_end_date
   validates :lender_id, comparison: { other_than: :borrower_id }
 
   after_save :sync_listing_status, if: :saved_change_to_status?
+  validates :end_date, presence: true, if: -> { listing&.listing_type == "Lend" }
+  validates :start_date, comparison: { less_than_or_equal_to: :end_date }, if: -> { start_date.present? && end_date.present? }
+  validates :end_date, comparison: { greater_than_or_equal_to: Date.current }, if: -> { end_date.present? }
 
   private
-
-  def lend_requires_end_date
-    return unless listing&.listing_type == "Lend"
-    errors.add(:end_date, "is required for lend") if end_date.blank?
-    # Optional: if already started, ensure start <= end
-    if start_date.present? && end_date.present? && start_date > end_date
-      errors.add(:start_date, "must be before end date")
-    end
-  end
 
   def sync_listing_status
     case status.to_sym
