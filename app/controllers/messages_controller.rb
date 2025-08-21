@@ -52,11 +52,9 @@ class MessagesController < ApplicationController
   private
 
   def load_threads
-    base = Message.where("sender_id = :id OR receiver_id = :id", id: current_user.id)
+    base = Message.where(sender: current_user).or(Message.where(receiver: current_user))
     @threads = base
-      .select(Arel.sql(
-        "DISTINCT ON (listing_id, LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id)) messages.*"
-      ))
+      .select("DISTINCT ON (listing_id, LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id)) messages.*")
       .order(Arel.sql(
         "listing_id, LEAST(sender_id, receiver_id), GREATEST(sender_id, receiver_id), created_at DESC"
       ))
