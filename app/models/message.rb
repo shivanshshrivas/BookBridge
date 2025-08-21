@@ -4,7 +4,7 @@ class Message < ApplicationRecord
   belongs_to :receiver, class_name: "User"
   belongs_to :messageable, polymorphic: true
 
-  validate :participants_are_distinct
+  validates :sender_id, comparison: { other_than: :receiver_id }
 
   scope :between, ->(u1, u2, listing_id) {
     where(listing_id:, sender_id: [u1, u2], receiver_id: [u1, u2]).order(:created_at)
@@ -12,11 +12,4 @@ class Message < ApplicationRecord
 
   def other_party_for(user) = (user.id == sender_id) ? receiver : sender
 
-  private
-
-  def participants_are_distinct
-    if sender_id == receiver_id
-      errors.add(:base, "Sender and receiver must be distinct users")
-    end
-  end
 end
