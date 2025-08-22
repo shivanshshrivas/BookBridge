@@ -39,19 +39,21 @@
           <p class="text-gray-800 font-bold text-xl"><%= number_to_currency(@listing.price) %></p>
         </div>
         <div class="mt-4 flex flex-row gap-4"> <!-- Message and Save buttons -->
-          <%= link_to "Message",
-      message_thread_path(listing_id: @listing.id, user_id: @listing.user_id), class: "px-4 py-2 bg-blue-500 text-white rounded" %>
-          <% if current_user.saved_listings.include?(@listing) %>
-            <%= button_to listing_saved_item_path(@listing), method: :delete, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
-              <svg fill="#00D438" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
-                <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="fill: #00D438;"></path>
-              </svg>
-            <% end %>
-          <% else %>
-            <%= button_to listing_saved_items_path(@listing), method: :post, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
-              <svg fill="none" stroke="#00D438" stroke-width="2" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
-                <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="stroke: #00D438;"></path>
-              </svg>
+          <% unless current_user == @listing.user %>
+            <%= link_to "Message",
+        message_thread_path(listing_id: @listing.id, user_id: @listing.user_id), class: "px-4 py-2 bg-blue-500 text-white rounded" %>
+            <% if current_user.saved_listings.include?(@listing) %>
+              <%= button_to listing_saved_item_path(@listing), method: :delete, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
+                <svg fill="#00D438" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                  <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="fill: #00D438;"></path>
+                </svg>
+              <% end %>
+            <% else %>
+              <%= button_to listing_saved_items_path(@listing), method: :post, class: "bg-green-100 hover:bg-green-200 p-3 rounded-lg" do %>
+                <svg fill="none" stroke="#00D438" stroke-width="2" width="20px" height="20px" viewBox="0 0 24 24" id="bookmark" data-name="Flat Color" xmlns="http://www.w3.org/2000/svg" class="icon flat-color">
+                  <path id="primary" d="M18,2H6A2,2,0,0,0,4,4V21a1,1,0,0,0,.5.86,1,1,0,0,0,1,0L12,18.15l6.5,3.72A1,1,0,0,0,19,22a.9.9,0,0,0,.5-.14A1,1,0,0,0,20,21V4A2,2,0,0,0,18,2Z" style="stroke: #00D438;"></path>
+                </svg>
+              <% end %>
             <% end %>
           <% end %>
         </div>
