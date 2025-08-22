@@ -20,7 +20,7 @@
         end %>
       <% filtered.each do |t| %>
         <div class="py-8 first:pt-0">
-            <%= render ListingCardComponent.new(listing: t.listing, mode: :transaction, transaction: t, current_user: current_user) %>
+            <%= render ListingCardComponent.new(listing: t.listing, mode: :transaction, transaction: t) %>
             <div class="mt-2 text-xs text-gray-500 flex gap-4">
               <% if t.start_date || t.end_date %>
                 <div>
