@@ -1,0 +1,31 @@
+<!-- Sidebar thread list -->
+<div class="w-full md:w-80 border-r border-gray-300 h-full flex flex-col bg-gray-50">
+  <div class=" p-3">
+    <h2 class="text-lg font-semibold">Messages</h2>
+    <input class="mt-2 w-full border border-gray-300 focus:ring-2 focus:ring-blue-400 p-2 text-sm rounded" placeholder="Search conversations" />
+  </div>
+  <div class="flex-1 overflow-y-auto">
+    <% if threads.blank? %>
+      <div class="p-4 text-gray-500 text-sm">No conversations yet.</div>
+    <% else %>
+      <% threads.each do |m| %>
+        <% other = (m.sender_id == current_user.id) ? m.receiver : m.sender %>
+        <%= link_to message_thread_path(listing_id: m.listing_id, user_id: other.id), class: "block px-4 py-3 hover:bg-white transition group border-b last:border-b-0" do %>
+          <div class="flex justify-between items-center">
+            <div class="font-medium text-sm truncate mr-2 group-hover:text-blue-600"><%= m.listing.title %></div>
+            <div class="text-[10px] text-gray-400 whitespace-nowrap"><%= time_ago_in_words(m.created_at) %> ago</div>
+          </div>
+          <div class="text-xs text-gray-500 truncate">
+            <%= other.name %>
+            •
+            <% if m.messageable.is_a?(TextMessage) %>
+              <%= m.messageable.content.presence || '...' %>
+            <% else %>
+              Transaction • <%= m.messageable.status.humanize %>
+            <% end %>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>

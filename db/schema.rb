@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_05_212004) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_08_185506) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -59,6 +59,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_212004) do
     t.index ["user_id"], name: "index_listings_on_user_id"
   end
 
+  create_table "messages", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "sender_id", null: false
+    t.bigint "receiver_id", null: false
+    t.string "messageable_type", null: false
+    t.bigint "messageable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "index_messages_on_listing_id"
+    t.index ["messageable_type", "messageable_id"], name: "index_messages_on_messageable"
+    t.index ["receiver_id"], name: "index_messages_on_receiver_id"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
   create_table "saved_items", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "listing_id", null: false
@@ -66,6 +80,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_212004) do
     t.datetime "updated_at", null: false
     t.index ["listing_id"], name: "index_saved_items_on_listing_id"
     t.index ["user_id"], name: "index_saved_items_on_user_id"
+  end
+
+  create_table "text_messages", force: :cascade do |t|
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "transactions", force: :cascade do |t|
+    t.bigint "listing_id", null: false
+    t.bigint "lender_id", null: false
+    t.bigint "borrower_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["borrower_id"], name: "index_transactions_on_borrower_id"
+    t.index ["lender_id"], name: "index_transactions_on_lender_id"
+    t.index ["listing_id"], name: "index_transactions_on_listing_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -87,6 +121,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_05_212004) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "listings", "users"
+  add_foreign_key "messages", "listings"
+  add_foreign_key "messages", "users", column: "receiver_id"
+  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "saved_items", "listings"
   add_foreign_key "saved_items", "users"
+  add_foreign_key "transactions", "listings"
+  add_foreign_key "transactions", "users", column: "borrower_id"
+  add_foreign_key "transactions", "users", column: "lender_id"
 end
