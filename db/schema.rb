@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_08_185506) do
+ActiveRecord::Schema[8.0].define(version: 2025_08_26_174211) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -82,6 +82,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_185506) do
     t.index ["user_id"], name: "index_saved_items_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.jsonb "query_params"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "text_messages", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -126,6 +134,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_08_185506) do
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "saved_items", "listings"
   add_foreign_key "saved_items", "users"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "transactions", "listings"
   add_foreign_key "transactions", "users", column: "borrower_id"
   add_foreign_key "transactions", "users", column: "lender_id"
