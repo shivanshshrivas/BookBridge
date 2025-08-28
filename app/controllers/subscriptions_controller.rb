@@ -11,16 +11,14 @@ class SubscriptionsController < ApplicationController
     @subscription = current_user.subscriptions.build(query_params: qp)
     if @subscription.save
       if request.referer&.include?(listings_path)
-        redirect_to listings_path(q: qp), notice: 'Arrival notification set.'
+        redirect_to listings_path(q: qp), notice: "Arrival notification set."
       else
-        redirect_to subscriptions_path, notice: 'Subscription created successfully.'
+        redirect_to subscriptions_path, notice: "Subscription created successfully."
       end
+    elsif request.referer&.include?(listings_path)
+      redirect_to listings_path(q: qp), alert: "Subscription could not be created."
     else
-      if request.referer&.include?(listings_path)
-        redirect_to listings_path(q: qp), alert: 'Subscription could not be created.'
-      else
-        redirect_to subscriptions_path, alert: 'Subscription could not be created.'
-      end
+      redirect_to subscriptions_path, alert: "Subscription could not be created."
     end
   end
 
@@ -29,10 +27,9 @@ class SubscriptionsController < ApplicationController
     qp = @subscription.query_params
     @subscription.destroy
     if request.referer&.include?(listings_path)
-      redirect_to listings_path(q: qp), notice: 'Arrival notification removed.'
+      redirect_to listings_path(q: qp), notice: "Arrival notification removed."
     else
-      redirect_to subscriptions_path, notice: 'Subscription canceled successfully.'
+      redirect_to subscriptions_path, notice: "Subscription canceled successfully."
     end
   end
-
 end

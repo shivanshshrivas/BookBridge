@@ -10,7 +10,11 @@ class ListingsController < ApplicationController
     @listings = params[:q].present? ? @q.result(distinct: true) : []
 
     if current_user && params[:q].present?
-      raw_q = params[:q].to_unsafe_h rescue params[:q]
+      raw_q = begin
+        params[:q].to_unsafe_h
+      rescue
+        params[:q]
+      end
       @existing_subscription = current_user.subscriptions.find_by(query_params: raw_q)
     end
   end
