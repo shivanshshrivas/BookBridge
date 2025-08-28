@@ -15,15 +15,20 @@ module ApplicationHelper
 			active   = %w[bg-blue-600 text-white]
 		end
 
-		# More robust active detection (skipped if force_inactive or no path given)
-		is_active = false
-		unless opts[:force_inactive] || path.blank?
-			is_active = if opts[:match] == :prefix && path.present?
-				request.path.start_with?(path)
-			elsif path == root_path
-				request.path == root_path
-			else
-				current_page?(path)
+		# Active detection
+		# Priority: explicit active_if override > computed logic
+		if opts.key?(:active_if)
+			is_active = !!opts[:active_if]
+		else
+			is_active = false
+			unless opts[:force_inactive] || path.blank?
+				is_active = if opts[:match] == :prefix && path.present?
+					request.path.start_with?(path)
+				elsif path == root_path
+					request.path == root_path
+				else
+					current_page?(path)
+				end
 			end
 		end
 
