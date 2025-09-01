@@ -7,18 +7,11 @@ class SubscriptionsController < ApplicationController
 
   def create
     # Expecting ransack query hash in params[:q]; store as JSON in query_params
-    qp = params[:q].is_a?(ActionController::Parameters) ? params[:q].to_unsafe_h : (params[:q].presence || {})
-    @subscription = current_user.subscriptions.build(query_params: qp)
+    @subscription = current_user.subscriptions.build(query_params: subscription_params)
     if @subscription.save
-      if request.referer&.include?(listings_path)
-        redirect_to listings_path(q: qp), notice: "Arrival notification set."
-      else
-        redirect_to subscriptions_path, notice: "Subscription created successfully."
-      end
-    elsif request.referer&.include?(listings_path)
-      redirect_to listings_path(q: qp), alert: "Subscription could not be created."
+      redirect_back(fallback_location: listings_path(q: subscription_params), notice: "Arrival notification set.")
     else
-      redirect_to subscriptions_path, alert: "Subscription could not be created."
+      redirect_back(fallback_location: listings_path(q: subscription_params), alert: "Subscription could not be created.")
     end
   end
 
@@ -26,10 +19,12 @@ class SubscriptionsController < ApplicationController
     @subscription = current_user.subscriptions.find(params[:id])
     qp = @subscription.query_params
     @subscription.destroy
-    if request.referer&.include?(listings_path)
-      redirect_to listings_path(q: qp), notice: "Arrival notification removed."
-    else
-      redirect_to subscriptions_path, notice: "Subscription canceled successfully."
-    end
+    redirect_back(fallback_location: listings_path(q: qp), notice: "Arrival notification removed.")
+  end
+
+  private
+
+  def subscription_params
+    params.permit(q: [:title_cont, :authors_cont, :isbn_cont, :course_number_cont, :listing_type_eq, :sorts, :selected_input])[:q] || {}
   end
 end
