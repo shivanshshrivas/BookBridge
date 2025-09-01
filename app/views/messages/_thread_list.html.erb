@@ -10,7 +10,7 @@
     <% else %>
       <% threads.each do |m| %>
         <% other = (m.sender_id == current_user.id) ? m.receiver : m.sender %>
-        <%= link_to message_thread_path(listing_id: m.listing_id, user_id: other.id), class: "block px-4 py-3 hover:bg-white transition group border-b last:border-b-0" do %>
+        <%= link_to message_thread_path(listing_id: m.listing_id, user_id: other.id), class: "block px-4 py-3 hover:bg-white transition group border-b border-gray-300 last:border-b-0" do %>
           <div class="flex justify-between items-center">
             <div class="font-medium text-sm truncate mr-2 group-hover:text-blue-600"><%= m.listing.title %></div>
             <div class="text-[10px] text-gray-400 whitespace-nowrap"><%= time_ago_in_words(m.created_at) %> ago</div>
