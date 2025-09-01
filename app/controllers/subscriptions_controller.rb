@@ -25,6 +25,8 @@ class SubscriptionsController < ApplicationController
   private
 
   def subscription_params
-    params.permit(q: [:title_cont, :authors_cont, :isbn_cont, :course_number_cont, :listing_type_eq, :sorts, :selected_input])[:q] || {}
+    params.require(:q).permit(:title_cont, :authors_cont, :isbn_cont, :course_number_cont, :listing_type_eq, :sorts, :selected_input)
+  rescue ActionController::ParameterMissing
+    {}
   end
 end
