@@ -18,7 +18,7 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
   </head>
   <body class="bg-gradient-to-b from-white to-blue-50 min-h-screen">
-    <%= render '/navbar' %>
+    <%= render 'layouts/navbar' %>
     <main class="ml-20 md:ml-24 px-4 md:px-8 py-6">
       <%= yield %>
     </main>
